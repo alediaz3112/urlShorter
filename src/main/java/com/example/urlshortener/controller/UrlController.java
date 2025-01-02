@@ -31,18 +31,33 @@ public class UrlController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Url> addUrl(@RequestBody Url request, @RequestParam("method") char method) {
-        String shortenedUrl;
-        if (method == 'b') {
-            shortenedUrl = bitlyService.shortenUrl(request.getOriginalUrl());
-        } else if (method == 'g') {
-            shortenedUrl = gooGlService.shortenUrl(request.getOriginalUrl());
-        } else {
-            return ResponseEntity.badRequest().body(null);
+    public ResponseEntity<?> addUrl(@RequestBody Url request, @RequestParam("method") char method) {
+        if (request.getOriginalUrl() == null || request.getOriginalUrl().isEmpty()) {
+            return ResponseEntity.badRequest().body("La URL original no puede estar vacía.");
         }
 
-        Url createdUrl = service.createShortUrl(request.getOriginalUrl(), shortenedUrl);
-        return ResponseEntity.ok(createdUrl);
+        String shortenedUrl;
+        try {
+            if (method == 'b') {
+                shortenedUrl = bitlyService.shortenUrl(request.getOriginalUrl());
+            } else if (method == 'g') {
+                shortenedUrl = gooGlService.shortenUrl(request.getOriginalUrl());
+            } else {
+                return ResponseEntity.badRequest().body("Método no válido. Use 'b' para Bitly o 'g' para Goo.gl.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al procesar la solicitud: " + e.getMessage());
+        }
+
+        // Intentar guardar en la base de datos
+        try {
+            Url createdUrl = service.createShortUrl(request.getOriginalUrl(), shortenedUrl);
+            return ResponseEntity.ok(createdUrl);
+        } catch (Exception e) {
+            // En caso de error, almacenar en cache
+            service.cacheUrl(request.getOriginalUrl(), shortenedUrl);
+            return ResponseEntity.status(202).body("La solicitud fue aceptada, pero almacenada en cache temporalmente.");
+        }
     }
 
     @DeleteMapping("/delete/{id}")
