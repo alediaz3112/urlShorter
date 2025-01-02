@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.beans.factory.annotation.Value;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +32,8 @@ public class UrlService {
     private String cacheKey; // Llave principal para almacenar URLs en el cache.
 
     private static final String CACHE_KEY = "pendingUrls";
+
+    private static final Logger logger = LogManager.getLogger(UrlService.class);
 
     public Url createShortUrl(String originalUrl, String customAlias) {
         Url url = new Url();
@@ -83,6 +87,7 @@ public class UrlService {
         log.setUrlId(urlId);
         log.setAction(action);
         log.setTimestamp(LocalDateTime.now());
+        logger.info("Logging action URL corta: " + action);
         logRepository.save(log);
     }
 
