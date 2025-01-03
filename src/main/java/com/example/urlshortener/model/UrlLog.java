@@ -19,6 +19,9 @@ public class UrlLog {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
+    @Column(nullable = false)
+    private int retentionDays; // Tiempo de permanencia en días (0 para indefinido)
+
     // Getters y setters
     public Long getId() {
         return id;
@@ -50,5 +53,13 @@ public class UrlLog {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getRetentionDays() {
+        return retentionDays;
+    }
+
+    public void setRetentionDays(int retentionDays) {
+        this.retentionDays = retentionDays;
     }
 }

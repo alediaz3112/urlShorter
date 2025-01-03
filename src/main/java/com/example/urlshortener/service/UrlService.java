@@ -35,11 +35,12 @@ public class UrlService {
 
     private static final Logger logger = LogManager.getLogger(UrlService.class);
 
-    public Url createShortUrl(String originalUrl, String customAlias) {
+    public Url createShortUrl(String originalUrl, String customAlias, int retentionDays) {
         Url url = new Url();
         url.setOriginalUrl(originalUrl);
         url.setShortUrl(customAlias != null ? customAlias : generateShortAlias());
         url.setActive(true);
+        url.setRetentionDays(retentionDays);
 
         try {
             Url savedUrl = repository.save(url);
@@ -118,4 +119,17 @@ public class UrlService {
             }
         }
     }
+
+    public List<Url> findByOriginalUrlContaining(String query) {
+        return repository.findByOriginalUrlContaining(query);
+    }
+
+    public Optional<Url> getUrlById(Long id) {
+        return repository.findById(id);
+    }
+
+    public Url updateUrl(Url url) {
+        return repository.save(url);
+    }
+
 }

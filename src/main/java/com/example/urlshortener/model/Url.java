@@ -1,6 +1,7 @@
 package com.example.urlshortener.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Url {
@@ -17,6 +18,9 @@ public class Url {
 
     @Column(nullable = false)
     private boolean active;
+
+    @Column(nullable = false)
+    private int retentionDays; // Tiempo de permanencia en días (0 para indefinido)
 
     // Getters y setters
     public Long getId() {
@@ -49,5 +53,13 @@ public class Url {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getRetentionDays() {
+        return retentionDays;
+    }
+
+    public void setRetentionDays(int retentionDays) {
+        this.retentionDays = retentionDays;
     }
 }
