@@ -102,16 +102,19 @@ La Aplicación de Acortador de URLs es un servicio web que permite a los usuario
 
 A continuación se muestra un diagrama de arquitectura de alto nivel de la Aplicación de Acortador de URLs.
 
-mermaid
+```mermaid
 graph TD;
-A[UrlController] --> B[UrlService];
-B --> C[BitlyService];
-B --> D[GooGlService];
-B --> E[UrlRepository];
-E --> F[PostgreSQL];
-B --> G[Micrometer];
-G --> H[Prometheus];
-H --> I[Grafana];
+    A[UrlController] --> B[UrlService];
+    B --> C[BitlyService];
+    B --> D[GooGlService];
+    B --> E[UrlRepository];
+    E --> F[PostgreSQL];
+    B --> G[Micrometer];
+    G --> H[Prometheus];
+    H --> I[Grafana];
+```
+
+
 
 ### Explicación del Diagrama
 - **UrlController**: Maneja las solicitudes HTTP e interactúa con los servicios.
