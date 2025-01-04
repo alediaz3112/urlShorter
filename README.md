@@ -105,8 +105,9 @@ A continuación se muestra un diagrama de arquitectura de alto nivel de la Aplic
 ```mermaid
 graph TD;
     A[UrlController] --> B[UrlService];
-    B --> C[BitlyService];
-    B --> D[GooGlService];
+    B --> J[Mock_urlShorter_APIs]
+    J --> C[BitlyService];
+    J --> D[GooGlService];
     B --> E[UrlRepository];
     E --> F[PostgreSQL];
     B --> G[Micrometer];
